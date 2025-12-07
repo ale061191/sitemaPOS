@@ -18,24 +18,27 @@ import {
 import { cn } from "@/lib/utils"
 import { Button } from "@/components/ui/button"
 
-const sidebarItems = [
-    { icon: LayoutDashboard, label: "Dashboard", href: "/dashboard" },
-    { icon: ShoppingBasket, label: "POS", href: "/dashboard/pos" },
-    { icon: Package, label: "Products", href: "/dashboard/products" },
-    { icon: Package, label: "Categories", href: "/dashboard/categories" },
-    { icon: ClipboardList, label: "Stock", href: "/dashboard/stock" }, // Restored
-    { icon: ClipboardList, label: "Orders", href: "/dashboard/orders" },
-    // { icon: CalendarDays, label: "Reservation", href: "/dashboard/reservation" }, // Hidden as per user request
-    { icon: Users, label: "Staff", href: "/dashboard/staff" },
-    { icon: Users, label: "Customers", href: "/dashboard/customers" }, // Added Customers
-    { icon: BarChart3, label: "Reports", href: "/dashboard/reports" }, // New Reports
-    { icon: Settings, label: "System Settings", href: "/dashboard/settings" },
-]
-
 import { logout } from "@/app/actions/auth"
+import { useLanguage } from "@/providers/language-provider"
 
 export function Sidebar({ role = "cashier" }: { role?: string }) {
     const pathname = usePathname()
+    const { t } = useLanguage()
+
+    // Dynamic Sidebar Items using translation
+    const sidebarItems = [
+        { icon: LayoutDashboard, label: t.dashboard, href: "/dashboard" },
+        { icon: ShoppingBasket, label: t.pos, href: "/dashboard/pos" },
+        { icon: Package, label: t.products, href: "/dashboard/products" },
+        { icon: Package, label: t.categories, href: "/dashboard/categories" },
+        { icon: ClipboardList, label: t.stock, href: "/dashboard/stock" },
+        { icon: ClipboardList, label: t.orders, href: "/dashboard/orders" },
+        // { icon: CalendarDays, label: t.reservation, href: "/dashboard/reservation" }, 
+        { icon: Users, label: t.staff, href: "/dashboard/staff" },
+        { icon: Users, label: t.customers, href: "/dashboard/customers" },
+        { icon: BarChart3, label: t.reports, href: "/dashboard/reports" },
+        { icon: Settings, label: t.settings, href: "/dashboard/settings" },
+    ]
 
     const filteredItems = sidebarItems.filter(item => {
         // Cashiers only see: Dashboard, POS, Orders, Reservation, Customers

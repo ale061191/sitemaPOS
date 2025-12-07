@@ -8,6 +8,7 @@ import { Label } from "@/components/ui/label"
 import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { useToast } from "@/hooks/use-toast"
+import { LanguageSwitcher } from "@/components/dashboard/language-switcher"
 
 export function SettingsClient() {
     const { toast } = useToast()
@@ -114,6 +115,25 @@ export function SettingsClient() {
                                 />
                                 <p className="text-xs text-muted-foreground">Applied to all taxable items.</p>
                             </div>
+                        </CardContent>
+                    </Card>
+
+                    {/* Language Settings */}
+                    <Card>
+                        <CardHeader>
+                            <CardTitle className="flex items-center gap-2">
+                                <Building2 className="h-5 w-5 text-purple-600" />
+                                Language Preferences
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent className="space-y-4">
+                            <div className="flex items-center justify-between">
+                                <Label>Interface Language</Label>
+                                <LanguageSwitcher />
+                            </div>
+                            <p className="text-xs text-muted-foreground">
+                                Select your preferred language for the interface.
+                            </p>
                         </CardContent>
                     </Card>
 

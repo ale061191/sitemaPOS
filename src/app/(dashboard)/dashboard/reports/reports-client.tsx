@@ -35,7 +35,10 @@ import {
 } from "recharts"
 import { getSalesReport, ReportRange } from "@/app/actions/reports"
 
+import { useLanguage } from "@/providers/language-provider"
+
 export function ReportsClient() {
+    const { t } = useLanguage()
     const [range, setRange] = useState<ReportRange>("today")
     const [data, setData] = useState<any>(null)
     const [loading, setLoading] = useState(true)
@@ -98,13 +101,13 @@ export function ReportsClient() {
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between">
                 <div>
-                    <h1 className="text-2xl font-bold tracking-tight">Sales Analytics</h1>
-                    <p className="text-muted-foreground">Monitor your business performance.</p>
+                    <h1 className="text-2xl font-bold tracking-tight">{t.sales_analytics}</h1>
+                    <p className="text-muted-foreground">{t.dashboard}</p>
                 </div>
                 <div className="flex gap-2">
                     <Button variant="outline" onClick={downloadCSV} disabled={!data || loading}>
                         <Download className="mr-2 h-4 w-4" />
-                        Export Excel
+                        {t.export_excel}
                     </Button>
                 </div>
             </div>
@@ -113,20 +116,20 @@ export function ReportsClient() {
                 <div className="bg-red-50 text-red-600 p-4 rounded-md border border-red-200 flex items-center gap-2">
                     <AlertCircle className="h-5 w-5" />
                     <div className="flex-1">
-                        <p className="font-bold">Error loading report</p>
+                        <p className="font-bold">{t.error}</p>
                         <p className="text-sm">{error}</p>
                     </div>
                     <Button variant="ghost" size="sm" onClick={fetchReport} className="text-red-700 hover:bg-red-100 hover:text-red-900">
-                        Try Again
+                        {t.try_again}
                     </Button>
                 </div>
             )}
 
             <Tabs defaultValue="today" value={range} onValueChange={(v: string) => setRange(v as ReportRange)} className="space-y-4">
                 <TabsList>
-                    <TabsTrigger value="today">Today</TabsTrigger>
-                    <TabsTrigger value="week">This Week</TabsTrigger>
-                    <TabsTrigger value="month">This Month</TabsTrigger>
+                    <TabsTrigger value="today">{t.today}</TabsTrigger>
+                    <TabsTrigger value="week">{t.week}</TabsTrigger>
+                    <TabsTrigger value="month">{t.month}</TabsTrigger>
                 </TabsList>
 
                 {loading ? (
@@ -139,7 +142,7 @@ export function ReportsClient() {
                         <div className="grid gap-4 md:grid-cols-3">
                             <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t.total_sales}</CardTitle>
                                     <TrendingUp className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
@@ -147,13 +150,13 @@ export function ReportsClient() {
                                         ${data.metrics.totalSales.toFixed(2)}
                                     </div>
                                     <p className="text-xs text-muted-foreground">
-                                        For {range === 'today' ? 'today' : range === 'week' ? 'this week' : 'this month'}
+                                        {range === 'today' ? t.today : range === 'week' ? t.week : t.month}
                                     </p>
                                 </CardContent>
                             </Card>
                             <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Orders</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t.total_orders}</CardTitle>
                                     <CreditCard className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
@@ -167,7 +170,7 @@ export function ReportsClient() {
                             </Card>
                             <Card>
                                 <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
-                                    <CardTitle className="text-sm font-medium">Avg. Ticket</CardTitle>
+                                    <CardTitle className="text-sm font-medium">{t.avg_ticket}</CardTitle>
                                     <Users className="h-4 w-4 text-muted-foreground" />
                                 </CardHeader>
                                 <CardContent>
@@ -228,19 +231,19 @@ export function ReportsClient() {
                         {/* Detailed Table */}
                         <Card>
                             <CardHeader>
-                                <CardTitle>Detailed Transactions</CardTitle>
+                                <CardTitle>{t.recent_orders} (Detailed)</CardTitle>
                             </CardHeader>
                             <CardContent>
                                 <div className="max-h-[400px] overflow-y-auto relative">
                                     <Table>
                                         <TableHeader className="sticky top-0 bg-background z-10 shadow-sm">
                                             <TableRow>
-                                                <TableHead>Order ID</TableHead>
+                                                <TableHead>{t.order_id}</TableHead>
                                                 <TableHead>Time</TableHead>
                                                 <TableHead>Cashier</TableHead>
                                                 <TableHead>Payment</TableHead>
-                                                <TableHead>Status</TableHead>
-                                                <TableHead className="text-right">Total</TableHead>
+                                                <TableHead>{t.status}</TableHead>
+                                                <TableHead className="text-right">{t.amount}</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
@@ -269,7 +272,7 @@ export function ReportsClient() {
                                                                 order.status === "COMPLETED" ? "bg-emerald-500 hover:bg-emerald-600" :
                                                                     "bg-red-500 hover:bg-red-600"
                                                             }>
-                                                                {order.status === "COMPLETED" ? "Completo" : "Cancelado"}
+                                                                {order.status === "COMPLETED" ? t.completed : t.cancelled}
                                                             </Badge>
                                                         </TableCell>
                                                         <TableCell className="text-right font-medium text-emerald-600">

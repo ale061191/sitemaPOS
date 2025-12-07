@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { OfflineProvider } from "@/providers/offline-context";
+import { LanguageProvider } from "@/providers/language-provider";
 import { CartProvider } from "@/providers/cart-context";
 import { Toaster } from "@/components/ui/toaster";
 import { ConnectionIndicator } from "@/components/dashboard/connection-indicator";
@@ -31,13 +32,15 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <OfflineProvider>
-          <CartProvider>
-            {children}
-            <ConnectionIndicator />
-            <Toaster />
-          </CartProvider>
-        </OfflineProvider>
+        <LanguageProvider>
+          <OfflineProvider>
+            <CartProvider>
+              {children}
+              <ConnectionIndicator />
+              <Toaster />
+            </CartProvider>
+          </OfflineProvider>
+        </LanguageProvider>
       </body>
     </html>
   );
