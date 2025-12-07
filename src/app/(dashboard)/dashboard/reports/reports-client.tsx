@@ -69,13 +69,14 @@ export function ReportsClient() {
 
         // BOM for Excel to read UTF-8 correctly
         const BOM = "\uFEFF";
-        const headers = ["ID Orden", "Fecha", "Hora", "Cajero", "Metodo Pago", "Total"]
+        const headers = ["ID Orden", "Fecha", "Hora", "Cajero", "Metodo Pago", "Estado", "Total"]
         const rows = data.rawOrders.map((o: any) => [
             o.id,
             format(new Date(o.created_at), "yyyy-MM-dd"),
             format(new Date(o.created_at), "HH:mm:ss"),
-            `"${o.profiles?.full_name || "Desconocido"}"`, // Quote names to handle commas
+            `"${o.profiles?.full_name || "Desconocido"}"`,
             o.payment_method,
+            o.status === "COMPLETED" ? "Completo" : "Cancelado",
             o.total_amount.toFixed(2)
         ])
 
@@ -238,13 +239,14 @@ export function ReportsClient() {
                                                 <TableHead>Time</TableHead>
                                                 <TableHead>Cashier</TableHead>
                                                 <TableHead>Payment</TableHead>
+                                                <TableHead>Status</TableHead>
                                                 <TableHead className="text-right">Total</TableHead>
                                             </TableRow>
                                         </TableHeader>
                                         <TableBody>
                                             {data.rawOrders.length === 0 ? (
                                                 <TableRow>
-                                                    <TableCell colSpan={5} className="text-center h-24">No orders found.</TableCell>
+                                                    <TableCell colSpan={6} className="text-center h-24">No orders found.</TableCell>
                                                 </TableRow>
                                             ) : (
                                                 data.rawOrders.map((order: any) => (
@@ -261,6 +263,14 @@ export function ReportsClient() {
                                                         </TableCell>
                                                         <TableCell>
                                                             <Badge variant="outline">{order.payment_method}</Badge>
+                                                        </TableCell>
+                                                        <TableCell>
+                                                            <Badge className={
+                                                                order.status === "COMPLETED" ? "bg-emerald-500 hover:bg-emerald-600" :
+                                                                    "bg-red-500 hover:bg-red-600"
+                                                            }>
+                                                                {order.status === "COMPLETED" ? "Completo" : "Cancelado"}
+                                                            </Badge>
                                                         </TableCell>
                                                         <TableCell className="text-right font-medium text-emerald-600">
                                                             ${order.total_amount.toFixed(2)}
